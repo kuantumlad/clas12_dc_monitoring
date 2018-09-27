@@ -490,6 +490,7 @@ void electronProtonAnaShort(int model){
 	for (int s = 0; s < 6; s++){
 		//inclusive
 		wSectorInclusive[s] = (TH1D*) resultsF->Get(Form("overview/wInclusiveS%d", s + 1));
+		wQ2SectorInclusive[s] = (TH2D*) resultsF->Get(Form("overview/wQ2InclusiveS%d", s + 1));
 
 		//exclusive
 		wQ2SectorExclusive[s] = (TH2D*) resultsF->Get(Form("overview/wQ2ExclusiveS%d", s + 1));
@@ -634,7 +635,6 @@ void electronProtonAnaShort(int model){
 	finalPresentationSixPlots->SaveAs(Form("monitoringJob%d.pdf(", model));
 
 //w vs q2
-
 		for (int s = 0; s < 6; s++){
 			finalPresentationSixPlots->cd(s + 1);
 			wQ2SectorExclusive[s]->Draw("COLZ");
@@ -642,19 +642,43 @@ void electronProtonAnaShort(int model){
 
 		}
 		finalPresentationSixPlots->SaveAs(Form("monitoringJob%d.pdf", model));
-
 		finalPresentationOnePlots->cd(1);
 		wVsPhi->Draw("COLZ");
 		sCaption.DrawLatex(0.832, 0.95, Form("Page 3"));
-
 		finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
 
+	//	w 1D 
+	for (int s = 0; s < 6; s++){
+		finalPresentationSixPlots->cd(s + 1);
+		wSectorInclusive[s]->Draw();
+		wSectorInclusive[s]->Fit(Form("elasGausPeakS%d", s + 1), "Q", "R", lowWValueFit[s], highWValueFit[s]);
+		elasGausPeak[s]->Draw("same");
+		if (s == 1) sCaption.DrawLatex(0.832, 0.95, Form("Page 4"));
+
+	}
+	finalPresentationSixPlots->SaveAs(Form("monitoringJob%d.pdf", model));
+
+//w vs q2
+		for (int s = 0; s < 6; s++){
+			finalPresentationSixPlots->cd(s + 1);
+			wQ2SectorInsluive[s]->Draw("COLZ");
+			if (s == 1) sCaption.DrawLatex(0.832, 0.95, Form("Page 5"));
+
+		}
+		finalPresentationSixPlots->SaveAs(Form("monitoringJob%d.pdf", model));
+		finalPresentationOnePlots->cd(1);
+	
+		wVsPhi->Draw("COLZ");
+		sCaption.DrawLatex(0.832, 0.95, Form("Page 6"));
+		finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
+
+	
 //pe 1D from theta e
 		for (int s = 0; s < 6; s++){
 			finalPresentationSixPlots->cd(s+1);
 			deltaPEFromETheta[s]->Draw("");
 			deltaPEFromETheta[s]->Fit(Form("deltaEPFitS%d", s + 1), "Q", "", lowDeltaPEValueFit[s], highDeltaPEValueFit[s]);
-			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 4"));
+			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 7"));
 
 		}
 		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
@@ -663,13 +687,13 @@ void electronProtonAnaShort(int model){
 		for (int s = 0; s < 6; s++){
 			finalPresentationSixPlots->cd(s+1);
 			deltaPEFromEThetaAsThetaE[s]->Draw("COLZ");
-			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 5"));
+			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 8"));
 		}
 		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
 
 		finalPresentationOnePlots->cd(1);
 		deltaPEFromPThetaAsPhiE->Draw("COLZ");
-		sCaption.DrawLatex(0.82, 0.95, Form("Page 6"));
+		sCaption.DrawLatex(0.82, 0.95, Form("Page 9"));
 		finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
 
 
@@ -678,7 +702,7 @@ void electronProtonAnaShort(int model){
 			finalPresentationSixPlots->cd(s+1);
 			deltaPPFromETheta[s]->Draw("");
 			deltaPPFromETheta[s]->Fit(Form("deltaPThetaFitS%d", s + 1), "Q", "", lowDeltaPPFromThetaEValueFit[s], highDeltaPPFromThetaEValueFit[s]);
-			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 7"));
+			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 10"));
 		}
 		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
 
@@ -686,7 +710,7 @@ void electronProtonAnaShort(int model){
 		for (int s = 0; s < 6; s++){
 			finalPresentationSixPlots->cd(s+1);
 			deltaPPFromEThetaAsThetaP[s]->Draw("COLZ");
-			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 8"));
+			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 11"));
 		}
 		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
 
@@ -694,7 +718,7 @@ void electronProtonAnaShort(int model){
 		for (int s = 0; s < 6; s++){
 			finalPresentationSixPlots->cd(s+1);
 			deltaPPFromEThetaAsPP[s]->Draw("COLZ");
-			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 9"));
+			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 12"));
 
 		}
 		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
@@ -705,7 +729,7 @@ void electronProtonAnaShort(int model){
 			finalPresentationSixPlots->cd(s+1);
 			deltaThetaPFromETheta[s]->Draw("");
 			deltaThetaPFromETheta[s]->Fit(Form("deltaPPFitS%d", s + 1), "Q", "R", lowDeltaThetaPValueFit[s], highDeltaThetaPValueFit[s]);
-			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 10"));
+			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 13"));
 		}
 		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
 
@@ -714,7 +738,7 @@ void electronProtonAnaShort(int model){
 		for (int s = 0; s < 6; s++){
 			finalPresentationSixPlots->cd(s+1);
 			deltaThetaPFromEThetaAsThetaE[s]->Draw("COLZ");
-			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 11"));
+			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 14"));
 		}
 		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
 
@@ -722,7 +746,7 @@ void electronProtonAnaShort(int model){
 		for (int s = 0; s < 6; s++){
 			finalPresentationSixPlots->cd(s+1);
 			deltaThetaPFromEThetaAsThetaP[s]->Draw("COLZ");
-			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 12"));
+			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 15"));
 		}
 		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
 
@@ -731,27 +755,27 @@ void electronProtonAnaShort(int model){
 		for (int s = 0; s < 6; s++){
 		  finalPresentationSixPlots->cd(s+1);
 		  zVsThetaElectron[s]->Draw("COLZ");
-		  if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 13"));
+		  if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 16"));
                 }
                 finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
 
 		finalPresentationOnePlots->cd(1);
                 zVsPhiElectron->Draw("COLZ");
-                sCaption.DrawLatex(0.832, 0.95, Form("Page 14"));
+                sCaption.DrawLatex(0.832, 0.95, Form("Page 17"));
 
 
 		finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
 		for (int s = 0; s < 6; s++){
 			finalPresentationSixPlots->cd(s+1);
 			zElectronSector[s]->Draw("COLZ");
-			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 15"));
+			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 18"));
 		}
 		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
 
 		for (int s = 0; s < 6; s++){
                   finalPresentationSixPlots->cd(s+1);
                   zVsThetaProton[s]->Draw("COLZ");
-                  if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 16"));
+                  if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 19"));
                 }
 
                 finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
@@ -759,31 +783,31 @@ void electronProtonAnaShort(int model){
 		
 		finalPresentationOnePlots->cd(1);
 		zVsPhiProton->Draw("COLZ");
-		sCaption.DrawLatex(0.82, 0.95, Form("Page 17"));
+		sCaption.DrawLatex(0.82, 0.95, Form("Page 20"));
 		finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
 		
 
 		for (int s = 0; s < 6; s++){
 			finalPresentationSixPlots->cd(s+1);
 			zProtonSector[s]->Draw("COLZ");
-			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 18"));
+			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 21"));
 		}
 		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
 
 
 		finalPresentationOnePlots->cd(1);
 		deltaZVsPhiElectron->Draw("COLZ");
-		sCaption.DrawLatex(0.82, 0.95, Form("Page 19"));
+		sCaption.DrawLatex(0.82, 0.95, Form("Page 22"));
 		finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
 		finalPresentationOnePlots->cd(1);
 		deltaZVsPhiProton->Draw("COLZ");
-		sCaption.DrawLatex(0.82, 0.95, Form("Page 20"));
+		sCaption.DrawLatex(0.82, 0.95, Form("Page 23"));
 		finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
 
 		for (int s = 0; s < 6; s++){
 			finalPresentationSixPlots->cd(s+1);
 			deltaZElectronProtonSector[s]->Draw("COLZ");
-			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 21"));
+			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 24"));
 		}
 		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf)", model));
 
