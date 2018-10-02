@@ -98,7 +98,9 @@ void electronProtonAnaShort(int model){
 	double sig0, sig1, sig2, sig3;
 	
 	string line0;
-	ifstream readFromWCut("w_cut_limits_job"+std::to_string(model)+".txt");
+	std::string parentDirectory = "/w/hallb-scifs17exp/clas12/bclary/CLAS12/validation/validationBrandon/markovMonitor/scripts/quick_fit_parameters/";
+
+	ifstream readFromWCut(parentDirectory+"w_cut_limits_job"+std::to_string(model)+".txt");
 	if( readFromWCut.is_open() ){
 	  while(readFromWCut >> sector0 ) {//std::getline (readFromWCut, line) ){
 	    
@@ -111,7 +113,7 @@ void electronProtonAnaShort(int model){
 	}
 	
  	//string line;
-	ifstream readFromdeltaPEFromETheta("deltapefrometheta_fit_limits_job"+std::to_string(model)+".txt");
+	ifstream readFromdeltaPEFromETheta(parentDirectory+"deltapefrometheta_fit_limits_job"+std::to_string(model)+".txt");
 	if( readFromdeltaPEFromETheta.is_open() ){
 	  while(readFromdeltaPEFromETheta >> sector1 ) {
 	    
@@ -126,7 +128,7 @@ void electronProtonAnaShort(int model){
 	//lowDeltaPEValueFit[3]= -0.025;
 	//highDeltaPEValueFit[3]= 0.025;
 
-	ifstream readFromdeltaPPFromETheta("deltaPPFromETheta_fit_limits_job"+std::to_string(model)+".txt");
+	ifstream readFromdeltaPPFromETheta(parentDirectory+"deltaPPFromETheta_fit_limits_job"+std::to_string(model)+".txt");
 	if( readFromdeltaPPFromETheta.is_open() ){
 	  while(readFromdeltaPPFromETheta >> sector2 ) {
 	    
@@ -140,7 +142,7 @@ void electronProtonAnaShort(int model){
 	//lowDeltaPPFromThetaEValueFit[3] = -0.05;//
 	//highDeltaPPFromThetaEValueFit[3] = 0.1;//highDeltaPPFromThetaEValueFit[3]*1.1;
 
-	ifstream readFromdeltaThetaPFromETheta("deltaThetaPFromETheta_fit_limits_job"+std::to_string(model)+".txt");
+	ifstream readFromdeltaThetaPFromETheta(parentDirectory+"deltaThetaPFromETheta_fit_limits_job"+std::to_string(model)+".txt");
 	if( readFromdeltaThetaPFromETheta.is_open() ){
 	  while(readFromdeltaThetaPFromETheta >> sector3 ) {
 	    
@@ -330,7 +332,8 @@ void electronProtonAnaShort(int model){
 		deltaEPFit[s]->SetLineColor(2);
 	}
 
-	TFile *resultsF = new TFile(Form("monjob%d.root", model));
+	std::string parentInDirectory = "/w/hallb-scifs17exp/clas12/bclary/CLAS12/validation/validationBrandon/markovMonitor/scripts/mon_job_root/";
+	TFile *resultsF = new TFile(Form("%smonjob%d.root", parentInDirectory.c_str() ,model));
 
 	//overview
 		//inclusive
@@ -615,7 +618,7 @@ void electronProtonAnaShort(int model){
 	//short version
 
 
-
+	std::string parentPDFDirectory = "/w/hallb-scifs17exp/clas12/bclary/CLAS12/validation/validationBrandon/markovMonitor/scripts/monitoring_job_pdf/";
 
 	TCanvas *finalPresentationSixPlots = new TCanvas("finalPresentationSixPlots", "finalPresentationSixPlots", 10, 10, 600, 800);
 	finalPresentationSixPlots->Divide(2, 3, 0.001, 0.001);
@@ -632,7 +635,7 @@ void electronProtonAnaShort(int model){
 		if (s == 1) sCaption.DrawLatex(0.832, 0.95, Form("Page 1"));
 
 	}
-	finalPresentationSixPlots->SaveAs(Form("monitoringJob%d.pdf(", model));
+	finalPresentationSixPlots->SaveAs(Form("%smonitoringJob%d.pdf(",parentPDFDirectory.c_str(), model));
 
 //w vs q2
 		for (int s = 0; s < 6; s++){
@@ -641,7 +644,8 @@ void electronProtonAnaShort(int model){
 			if (s == 1) sCaption.DrawLatex(0.832, 0.95, Form("Page 2"));
 
 		}
-		finalPresentationSixPlots->SaveAs(Form("monitoringJob%d.pdf", model));
+		finalPresentationSixPlots->SaveAs(Form("%smonitoringJob%d.pdf",parentPDFDirectory.c_str(), model));
+
 		finalPresentationOnePlots->cd(1);
 		wVsPhi->Draw("COLZ");
 		sCaption.DrawLatex(0.832, 0.95, Form("Page 3"));
@@ -656,7 +660,8 @@ void electronProtonAnaShort(int model){
 		if (s == 1) sCaption.DrawLatex(0.832, 0.95, Form("Page 4"));
 
 	}
-	finalPresentationSixPlots->SaveAs(Form("monitoringJob%d.pdf", model));
+	//finalPresentationSixPlots->SaveAs(Form("monitoringJob%d.pdf", model));
+	finalPresentationSixPlots->SaveAs(Form("%smonitoringJob%d.pdf",parentPDFDirectory.c_str(), model));
 
 //w vs q2
 		for (int s = 0; s < 6; s++){
@@ -670,7 +675,8 @@ void electronProtonAnaShort(int model){
 	
 		wVsPhi->Draw("COLZ");
 		sCaption.DrawLatex(0.832, 0.95, Form("Page 6"));
-		finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
+		//finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
+		finalPresentationOnePlots->Print(Form("%smonitoringJob%d.pdf", parentPDFDirectory.c_str(), model));
 
 	
 //pe 1D from theta e
@@ -681,7 +687,7 @@ void electronProtonAnaShort(int model){
 			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 7"));
 
 		}
-		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
+		finalPresentationSixPlots->Print(Form("%smonitoringJob%d.pdf",parentPDFDirectory.c_str(), model));
 
 //pe as theta E from thetaE
 		for (int s = 0; s < 6; s++){
@@ -689,12 +695,15 @@ void electronProtonAnaShort(int model){
 			deltaPEFromEThetaAsThetaE[s]->Draw("COLZ");
 			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 8"));
 		}
-		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
+		finalPresentationSixPlots->Print(Form("%smonitoringJob%d.pdf",parentPDFDirectory.c_str(), model));
 
 		finalPresentationOnePlots->cd(1);
 		deltaPEFromPThetaAsPhiE->Draw("COLZ");
-		sCaption.DrawLatex(0.82, 0.95, Form("Page 9"));
-		finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
+
+  sCaption.DrawLatex(0.82, 0.95, Form("Page 9"));
+		//finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
+		//sCaption.DrawLatex(0.82, 0.95, Form("Page 6"));
+		finalPresentationOnePlots->Print(Form("%smonitoringJob%d.pdf",parentPDFDirectory.c_str(), model));
 
 
 //p p 1D from theta e
@@ -704,7 +713,7 @@ void electronProtonAnaShort(int model){
 			deltaPPFromETheta[s]->Fit(Form("deltaPThetaFitS%d", s + 1), "Q", "", lowDeltaPPFromThetaEValueFit[s], highDeltaPPFromThetaEValueFit[s]);
 			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 10"));
 		}
-		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
+		finalPresentationSixPlots->Print(Form("%smonitoringJob%d.pdf", parentPDFDirectory.c_str(), model));
 
 		//as theta p from thetae
 		for (int s = 0; s < 6; s++){
@@ -712,7 +721,7 @@ void electronProtonAnaShort(int model){
 			deltaPPFromEThetaAsThetaP[s]->Draw("COLZ");
 			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 11"));
 		}
-		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
+		finalPresentationSixPlots->Print(Form("%smonitoringJob%d.pdf",parentPDFDirectory.c_str(), model));
 
 //pp as p p from thetae
 		for (int s = 0; s < 6; s++){
@@ -721,7 +730,7 @@ void electronProtonAnaShort(int model){
 			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 12"));
 
 		}
-		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
+		finalPresentationSixPlots->Print(Form("%smonitoringJob%d.pdf",parentPDFDirectory.c_str(), model));
 
 	//as theta E from thetae
 
@@ -731,7 +740,7 @@ void electronProtonAnaShort(int model){
 			deltaThetaPFromETheta[s]->Fit(Form("deltaPPFitS%d", s + 1), "Q", "R", lowDeltaThetaPValueFit[s], highDeltaThetaPValueFit[s]);
 			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 13"));
 		}
-		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
+		finalPresentationSixPlots->Print(Form("%smonitoringJob%d.pdf", parentPDFDirectory.c_str(), model));
 
 
 	//as theta E from thetae
@@ -740,7 +749,7 @@ void electronProtonAnaShort(int model){
 			deltaThetaPFromEThetaAsThetaE[s]->Draw("COLZ");
 			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 14"));
 		}
-		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
+		finalPresentationSixPlots->Print(Form("%smonitoringJob%d.pdf", parentPDFDirectory.c_str(), model));
 
 //as theta p from thetae
 		for (int s = 0; s < 6; s++){
@@ -748,7 +757,7 @@ void electronProtonAnaShort(int model){
 			deltaThetaPFromEThetaAsThetaP[s]->Draw("COLZ");
 			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 15"));
 		}
-		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
+		finalPresentationSixPlots->Print(Form("%smonitoringJob%d.pdf",parentPDFDirectory.c_str(), model));
 
 
 //vertex quantities
@@ -757,20 +766,20 @@ void electronProtonAnaShort(int model){
 		  zVsThetaElectron[s]->Draw("COLZ");
 		  if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 16"));
                 }
-                finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
+                finalPresentationSixPlots->Print(Form("%smonitoringJob%d.pdf",parentPDFDirectory.c_str(), model));
 
 		finalPresentationOnePlots->cd(1);
                 zVsPhiElectron->Draw("COLZ");
                 sCaption.DrawLatex(0.832, 0.95, Form("Page 17"));
 
 
-		finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
+		finalPresentationOnePlots->Print(Form("%smonitoringJob%d.pdf",parentPDFDirectory.c_str(), model));
 		for (int s = 0; s < 6; s++){
 			finalPresentationSixPlots->cd(s+1);
 			zElectronSector[s]->Draw("COLZ");
 			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 18"));
 		}
-		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
+		finalPresentationSixPlots->Print(Form("%smonitoringJob%d.pdf",parentPDFDirectory.c_str(), model));
 
 		for (int s = 0; s < 6; s++){
                   finalPresentationSixPlots->cd(s+1);
@@ -778,13 +787,16 @@ void electronProtonAnaShort(int model){
                   if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 19"));
                 }
 
-                finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
+                finalPresentationSixPlots->Print(Form("%smonitoringJob%d.pdf",parentPDFDirectory.c_str(), model));
 
 		
 		finalPresentationOnePlots->cd(1);
 		zVsPhiProton->Draw("COLZ");
-		sCaption.DrawLatex(0.82, 0.95, Form("Page 20"));
-		finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
+		
+  sCaption.DrawLatex(0.82, 0.95, Form("Page 20"));
+		//finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
+		//sCaption.DrawLatex(0.82, 0.95, Form("Page 17"));
+		finalPresentationOnePlots->Print(Form("%smonitoringJob%d.pdf",parentPDFDirectory.c_str(), model));
 		
 
 		for (int s = 0; s < 6; s++){
@@ -792,24 +804,32 @@ void electronProtonAnaShort(int model){
 			zProtonSector[s]->Draw("COLZ");
 			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 21"));
 		}
-		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf", model));
+		finalPresentationSixPlots->Print(Form("%smonitoringJob%d.pdf", parentPDFDirectory.c_str(),model));
 
 
 		finalPresentationOnePlots->cd(1);
 		deltaZVsPhiElectron->Draw("COLZ");
 		sCaption.DrawLatex(0.82, 0.95, Form("Page 22"));
-		finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
+		//finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
+    finalPresentationOnePlots->Print(Form("%smonitoringJob%d.pdf",parentPDFDirectory.c_str(), model));
 		finalPresentationOnePlots->cd(1);
 		deltaZVsPhiProton->Draw("COLZ");
 		sCaption.DrawLatex(0.82, 0.95, Form("Page 23"));
-		finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
+    finalPresentationOnePlots->Print(Form("%smonitoringJob%d.pdf",parentPDFDirectory.c_str(), model));
+		//finalPresentationOnePlots->Print(Form("monitoringJob%d.pdf", model));
+		//sCaption.DrawLatex(0.82, 0.95, Form("Page 19"));
+		//finalPresentationOnePlots->Print(Form("%smonitoringJob%d.pdf",parentPDFDirectory.c_str(), model));
+		//finalPresentationOnePlots->cd(1);
+		//deltaZVsPhiProton->Draw("COLZ");
+		//sCaption.DrawLatex(0.82, 0.95, Form("Page 20"));
+		//finalPresentationOnePlots->Print(Form("%smonitoringJob%d.pdf",parentPDFDirectory.c_str(), model));
 
 		for (int s = 0; s < 6; s++){
 			finalPresentationSixPlots->cd(s+1);
 			deltaZElectronProtonSector[s]->Draw("COLZ");
 			if (s == 1) sCaption.DrawLatex(0.82, 0.95, Form("Page 24"));
 		}
-		finalPresentationSixPlots->Print(Form("monitoringJob%d.pdf)", model));
+		finalPresentationSixPlots->Print(Form("%smonitoringJob%d.pdf)",parentPDFDirectory.c_str(), model));
 
 
 }		

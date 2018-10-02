@@ -91,7 +91,7 @@ int electronProtonFinal(int model){
 
 	int nWBins = 250;
 	int nQ2Bins = 250;
-	float lowBorderW = 0.85;
+	float lowBorderW = 0.80; //0.85;
 	float highBorderW = 1.7;
 	float lowBorderQ2 = 0.0;
 	float highBorderQ2 = 1.0;
@@ -151,9 +151,12 @@ int electronProtonFinal(int model){
 	double mean;
 	double sigma;
 
+	std::string parentDirectory = "/w/hallb-scifs17exp/clas12/bclary/CLAS12/validation/validationBrandon/markovMonitor/scripts/quick_fit_parameters/";
+	
 	string line;
-	ifstream readFromWCut("w_cut_limits_job"+std::to_string(model)+".txt");
+	ifstream readFromWCut(parentDirectory+"w_cut_limits_job"+std::to_string(model)+".txt");
 	if( readFromWCut.is_open() ){
+	  std::cout << " OPENED FILES " << std::endl;	
 	  while(readFromWCut >> sector ) {//std::getline (readFromWCut, line) ){
 
 	    readFromWCut >> mean >> sigma;
@@ -170,7 +173,7 @@ int electronProtonFinal(int model){
 	  double sigma2;
     
 	  string line2;
-	  ifstream readFromPhiCut("phi_cut_limits_job"+std::to_string(model)+".txt");
+	  ifstream readFromPhiCut(parentDirectory+"phi_cut_limits_job"+std::to_string(model)+".txt");
 	  if( readFromPhiCut.is_open() ){
 	    while( readFromPhiCut >> sector2  ){
 
@@ -192,7 +195,8 @@ int electronProtonFinal(int model){
 	}
 
 	
-	TFile *resultsF = new TFile(Form("monjob%d.root", model), "recreate");
+	std::string parentOutDirectory = "/w/hallb-scifs17exp/clas12/bclary/CLAS12/validation/validationBrandon/markovMonitor/scripts/mon_job_root/";	
+	TFile *resultsF = new TFile( Form("%smonjob%d.root",parentOutDirectory.c_str(), model), "recreate");
 	resultsF->mkdir("overview");
 	resultsF->mkdir("eBeam");
 	resultsF->mkdir("electronInclusive");
@@ -202,9 +206,9 @@ int electronProtonFinal(int model){
 	resultsF->mkdir("pElectron");
 	resultsF->mkdir("pProton");
 
+	std::string parentInDirectory = "/w/hallb-scifs17exp/clas12/bclary/CLAS12/validation/validationBrandon/markovMonitor/scripts/electron_proton_final_root/";
 
-
-	TFile f(Form("job%d.root", model));
+	TFile f(Form("%sjob%d.root", parentInDirectory.c_str(), model));
 
 	float eBeam = 2.2212;
 	float mProton = 0.98327;
@@ -1189,18 +1193,20 @@ int electronProtonFinal(int model){
 	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 	// write out fit limits for electronProtonAna
 	ofstream outputLimits1;
-	std::string writeDeltapefrometheta = "deltapefrometheta_fit_limits_job"+std::to_string(model)+".txt";
+	std::string writeDeltapefrometheta = parentDirectory+"deltapefrometheta_fit_limits_job"+std::to_string(model)+".txt";
 	std::cout << " Creating File " << writeDeltapefrometheta << std::endl;
+	
 	outputLimits1.open(writeDeltapefrometheta);
 
 	for( int s = 0; s < 6; s++ ){    
+	  std::cout << " >>  " << deltaPEFromETheta[s]->GetEntries() << std::endl;
 	  TF1 *fittemp=fitHisto(deltaPEFromETheta[s]);
 	  std::cout << " Sector s: " << s << ", " << fittemp->GetParameter(1) << ", " << fittemp->GetParameter(2);    
 	  outputLimits1 << s << " " << fittemp->GetParameter(1) << " " << fittemp->GetParameter(2) << std::endl;
 	}
 
 	ofstream outputLimits2;
-	std::string writeDeltaPPFromETheta = "deltaPPFromETheta_fit_limits_job"+std::to_string(model)+".txt";
+	std::string writeDeltaPPFromETheta = parentDirectory+"deltaPPFromETheta_fit_limits_job"+std::to_string(model)+".txt";
 	std::cout << " Creating File " << writeDeltaPPFromETheta << std::endl;
 	outputLimits2.open(writeDeltaPPFromETheta);
 
@@ -1212,7 +1218,7 @@ int electronProtonFinal(int model){
 
 
 	ofstream outputLimits3;
-	std::string writeDeltaThetaPFromETheta = "deltaThetaPFromETheta_fit_limits_job"+std::to_string(model)+".txt";
+	std::string writeDeltaThetaPFromETheta = parentDirectory+"deltaThetaPFromETheta_fit_limits_job"+std::to_string(model)+".txt";
 	std::cout << " Creating File " << writeDeltaThetaPFromETheta << std::endl;
 	outputLimits3.open(writeDeltaThetaPFromETheta);
 

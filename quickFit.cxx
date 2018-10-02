@@ -84,9 +84,12 @@ int quickFit(int model){
   float deltaPPLow = -0.4;
   float deltaPPHigh = 0.4;
 
-  TFile f(Form("job%d.root", model));
+  std::string parentInDirectory = "/w/hallb-scifs17exp/clas12/bclary/CLAS12/validation/validationBrandon/markovMonitor/scripts/electron_proton_final_root/";
+  TFile f(Form("%sjob%d.root", parentInDirectory.c_str(), model));
   
-  TFile *quick_fit_results = new TFile(Form("quick_fit%d.root", model), "recreate");
+
+  std::string parentOutDirectory = "/w/hallb-scifs17exp/clas12/bclary/CLAS12/validation/validationBrandon/markovMonitor/scripts/quick_fit_parameters/";
+  TFile *quick_fit_results = new TFile(Form("%squick_fit%d.root", parentOutDirectory.c_str(), model), "recreate");
 
   float eBeam = 2.2212;
   float mProton = 0.98327;
@@ -198,6 +201,7 @@ int quickFit(int model){
 	      p4_proton[j].SetPxPyPzE(prot_px[j], prot_py[j], prot_pz[j], prot_E[j]);
 	      float deltaPhi = p4_ele[i].Phi()*toRD - p4_proton[j].Phi()*toRD;
 	      if (deltaPhi < 0) deltaPhi = -deltaPhi;
+	      std::cout <<  " >>  " << deltaPhi << " " << W << std::endl;
 	      phiEphiP[sectorElectron]->Fill(deltaPhi);
 	      wSectorExclusive[sectorElectron]->Fill(W);
 
@@ -214,7 +218,8 @@ int quickFit(int model){
   // macro.    
 
   ofstream outputWCuts;
-  std::string f_out_w_name = "w_cut_limits_job"+std::to_string(model)+".txt";
+  std::string parentDirectory = "/w/hallb-scifs17exp/clas12/bclary/CLAS12/validation/validationBrandon/markovMonitor/scripts/quick_fit_parameters/";
+  std::string f_out_w_name = parentDirectory+"w_cut_limits_job"+std::to_string(model)+".txt";
   std::cout << " Creating W cuts output file " << f_out_w_name << std::endl;
   outputWCuts.open(f_out_w_name);
 
@@ -225,7 +230,7 @@ int quickFit(int model){
   }
 
   ofstream outputPhiCuts;
-  std::string f_out_phi_name = "phi_cut_limits_job"+std::to_string(model)+".txt";
+  std::string f_out_phi_name = parentDirectory+ "phi_cut_limits_job"+std::to_string(model)+".txt";
   outputPhiCuts.open(f_out_phi_name);
 
   for( int s = 0; s < 6; s++ ){    
